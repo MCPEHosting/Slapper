@@ -30,7 +30,6 @@ use pocketmine\world\Location;
 use pocketmine\world\World;
 use slapper\entities\other\SlapperBoat;
 use slapper\entities\SlapperEndCrystal;
-use slapper\entities\other\SlapperFallingSand;
 use slapper\entities\other\SlapperMinecart;
 use slapper\entities\other\SlapperPrimedTNT;
 use slapper\entities\SlapperBat;
@@ -95,7 +94,7 @@ class Main extends PluginBase implements Listener
 		"Silverfish", "Villager", "Zombie", "Human",
 		"Bat", "CaveSpider", "LavaSlime", "Ghast",
 		"Ocelot", "Blaze", "ZombieVillager", "Snowman",
-		"Minecart", "FallingSand", "Boat", "PrimedTNT",
+		"Minecart", /*"FallingSand",*/ "Boat", "PrimedTNT",
 		"Horse", "Donkey", "Mule", "SkeletonHorse",
 		"ZombieHorse", "Witch", "Rabbit", "Stray",
 		"Husk", "WitherSkeleton", "IronGolem", "Snowman",
@@ -111,7 +110,7 @@ class Main extends PluginBase implements Listener
 		"Player" => "Human",
 		"VillagerZombie" => "ZombieVillager",
 		"SnowGolem" => "Snowman",
-		"FallingBlock" => "FallingSand",
+		//"FallingBlock" => "FallingSand",
 		"FakeBlock" => "FallingSand",
 		"VillagerGolem" => "IronGolem",
 		"EGuardian" => "ElderGuardian",
@@ -127,13 +126,13 @@ class Main extends PluginBase implements Listener
 	/** @var string */
 	public $noperm = TextFormat::GREEN . "[" . TextFormat::YELLOW . "Slapper" . TextFormat::GREEN . "] You don't have permission.";
 	/** @var string */
-	public $helpHeader =
+	public string $helpHeader =
 		TextFormat::YELLOW . "---------- " .
 		TextFormat::GREEN . "[" . TextFormat::YELLOW . "Slapper Help" . TextFormat::GREEN . "] " .
 		TextFormat::YELLOW . "----------";
 
 	/** @var string[] */
-	public $mainArgs = [
+	public array $mainArgs = [
 		"help: /slapper help",
 		"spawn: /slapper spawn <type> [name]",
 		"edit: /slapper edit [id] [args...]",
@@ -144,7 +143,7 @@ class Main extends PluginBase implements Listener
 		"entitys: /slapper entitys",
 	];
 	/** @var string[] */
-	public $editArgs = [
+	public array $editArgs = [
 		"helmet: /slapper edit <eid> helmet <id>",
 		"chestplate: /slapper edit <eid> chestplate <id>",
 		"leggings: /slapper edit <eid> leggings <id>",
@@ -192,7 +191,7 @@ class Main extends PluginBase implements Listener
 					 SlapperPrimedTNT::class, SlapperHorse::class, SlapperDonkey::class,
 					 SlapperSkeletonHorse::class, SlapperZombieHorse::class, SlapperRabbit::class,
 					 SlapperStray::class, SlapperHusk::class, SlapperWitherSkeleton::class,
-					 SlapperFallingSand::class, SlapperElderGuardian::class, SlapperEndermite::class,
+					 /*SlapperFallingSand::class,*/ SlapperElderGuardian::class, SlapperEndermite::class,
 					 SlapperEvoker::class, SlapperGuardian::class, SlapperLlama::class,
 					 SlapperPolarBear::class, SlapperShulker::class, SlapperVex::class,
 					 SlapperVindicator::class, SlapperWither::class, SlapperEndCrystal::class
@@ -216,7 +215,7 @@ class Main extends PluginBase implements Listener
 	public function checkUpdate(bool $isRetry = false): void
 	{
 
-		$this->getServer()->getAsyncPool()->submitTask(new CheckUpdateTask($this->getDescription()->getName(), $this->getDescription()->getVersion()));
+		//$this->getServer()->getAsyncPool()->submitTask(new CheckUpdateTask($this->getDescription()->getName(), $this->getDescription()->getVersion()));
 	}
 
 
@@ -534,13 +533,13 @@ class Main extends PluginBase implements Listener
 												case "blockid":
 												case "tileid":
 													if (isset($args[2])) {
-														if ($entity instanceof SlapperFallingSand) {
+														/*if ($entity instanceof SlapperFallingSand) {
 															$data = explode(":", $args[2]);
 															$entity->setBlock(BlockFactory::getInstance()->get((int)($data[0] ?? 1), (int)($data[1] ?? 0)));
 															$sender->sendMessage($this->prefix . "Block updated.");
 														} else {
 															$sender->sendMessage($this->prefix . "That entity is not a block.");
-														}
+														}*/
 													} else {
 														$sender->sendMessage($this->prefix . "Please enter a value.");
 													}

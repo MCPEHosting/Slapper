@@ -27,10 +27,10 @@ class SlapperEntity extends Entity implements SlapperInterface{
 
     public static function getNetworkTypeId(): string{
         //We are using EntityLegacyIds for BC (#blamejojoe)
-        return LegacyEntityIdToStringIdMap::getInstance()->legacyToString(static::TYPE_ID) ?? throw new \LogicException(static::class . ' has invalid Entity ID');
+        return static::TYPE_ID; //LegacyEntityIdToStringIdMap::getInstance()->legacyToString(static::TYPE_ID) ?? throw new \LogicException(static::class . ' has invalid Entity ID');
     }
 
-    const TYPE_ID = 0;
+    const TYPE_ID = "no id given";
     const HEIGHT = 0;
 
     /** @var float */
@@ -57,7 +57,7 @@ class SlapperEntity extends Entity implements SlapperInterface{
             }
         }
         $this->version = $nbt->getString('SlapperVersion', '');
-        $this->setImmobile(true);
+        $this->setNoClientPredictions(true);
         $this->setNameTagVisible(false);
 
 		if($nbt->getTag("Scale") !== null){
@@ -156,5 +156,15 @@ class SlapperEntity extends Entity implements SlapperInterface{
 	protected function syncNetworkData(EntityMetadataCollection $properties): void {
 		parent::syncNetworkData($properties);
 		$properties->setString(EntityMetadataProperties::NAMETAG, "");
+	}
+
+	protected function getInitialDragMultiplier(): float
+	{
+		return 0.0;
+	}
+
+	protected function getInitialGravity(): float
+	{
+		return 0.0;
 	}
 }

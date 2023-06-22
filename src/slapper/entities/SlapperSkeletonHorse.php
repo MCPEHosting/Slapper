@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace slapper\entities;
 
-use pocketmine\data\bedrock\EntityLegacyIds;
+use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 
 class SlapperSkeletonHorse extends SlapperEntity {
 
-    const TYPE_ID = EntityLegacyIds::SKELETON_HORSE;
+    const TYPE_ID = EntityIds::SKELETON_HORSE;
     const HEIGHT = 1.6;
 
 }

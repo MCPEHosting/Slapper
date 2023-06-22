@@ -20,7 +20,7 @@ class SlapperCommandSender implements CommandSender{
     private Server $server;
     private Language $language;
 
-    public function __construct(private Main $plugin){
+    public function __construct(private readonly Main $plugin){
         $this->server = $plugin->getServer();
         $this->language = $this->server->getLanguage();
         $this->perm = new PermissibleBase([DefaultPermissions::ROOT_OPERATOR => true]);

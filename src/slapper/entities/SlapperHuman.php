@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace slapper\entities;
 
 use pocketmine\entity\Human;
-use pocketmine\entity\Entity;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\network\mcpe\convert\LegacySkinAdapter;
+use pocketmine\network\mcpe\convert\SkinAdapter;
 use pocketmine\network\mcpe\convert\SkinAdapterSingleton;
 use pocketmine\network\mcpe\protocol\PlayerListPacket;
-use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataCollection;
 use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataProperties;
 use pocketmine\network\mcpe\protocol\types\entity\MetadataProperty;
 use pocketmine\network\mcpe\protocol\types\entity\StringMetadataProperty;
@@ -26,10 +26,12 @@ class SlapperHuman extends Human implements SlapperInterface{
     use SlapperTrait;
 
     protected string $menuName;
+	private LegacySkinAdapter $skinAdapter;
 
     private CompoundTag $namedTagHack;
 
     public function initEntity(CompoundTag $nbt): void{
+		$this->skinAdapter = new LegacySkinAdapter();
 		parent::initEntity($nbt);
         $this->namedTagHack = $nbt;
         $this->menuName = $nbt->getString('MenuName', '');
@@ -77,7 +79,7 @@ class SlapperHuman extends Human implements SlapperInterface{
         }
         foreach($targets as $p){
             $data[EntityMetadataProperties::NAMETAG] = new StringMetadataProperty($this->getDisplayName($p));
-            $p->getNetworkSession()->syncActorData($this, $data);
+			$p->getNetworkSession()->getEntityEventBroadcaster()->syncActorData([$p->getNetworkSession()], $this, $data);
         }
     }
 
@@ -85,7 +87,7 @@ class SlapperHuman extends Human implements SlapperInterface{
         parent::sendSpawnPacket($player);
 
         if ($this->menuName !== "") {
-            $player->getNetworkSession()->sendDataPacket(PlayerListPacket::add([PlayerListEntry::createAdditionEntry($this->getUniqueId(), $this->getId(), $this->menuName, SkinAdapterSingleton::get()->toSkinData($this->getSkin()), '')]));
+            $player->getNetworkSession()->sendDataPacket(PlayerListPacket::add([PlayerListEntry::createAdditionEntry($this->getUniqueId(), $this->getId(), $this->menuName, $this->skinAdapter->toSkinData($this->getSkin()), '')]));
         }
     }
 

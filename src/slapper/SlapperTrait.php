@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace slapper;
 
+use pocketmine\entity\Living;
 use pocketmine\player\Player;
 
 /**
@@ -38,13 +39,14 @@ trait SlapperTrait {
         //NOOP
     }
 
-    public function getDisplayName(Player $player): string {
-        $vars = [
+    public function getDisplayName(/*Player $player*/): string {
+		return $this->nameTag !== "" ? $this->nameTag : $this->getName();
+        /*$vars = [
             "{name}" => $player->getName(),
             "{display_name}" => $player->getDisplayName(),
             "{nametag}" => $player->getNameTag()
         ];
-        return str_replace(array_keys($vars), array_values($vars), $this->getNameTag());
+        return str_replace(array_keys($vars), array_values($vars), $this->getNameTag());*/
     }
 
     /** @return string[] */
